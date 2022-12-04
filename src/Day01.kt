@@ -1,37 +1,37 @@
-fun main() {
-    class CalorieTracker(val n: Int) {
-        private var topNMaxCalories = List(n) { 0 }
-        private var runningTotalCaloriesForCurrentElf = 0
+class CalorieTracker(val n: Int) {
+    private var topNMaxCalories = List(n) { 0 }
+    private var runningTotalCaloriesForCurrentElf = 0
 
-        init {
-            require(n >= 1)
-        }
-
-        fun sumTopNMaxCalories(input: List<String>) =
-            input.forEach(::processLine).run { topNMaxCalories.sum() }
-
-        private fun processLine(line: String) =
-            if (line.isBlank()) {
-                stopTrackingCurrentElf()
-            } else {
-                addCaloriesToCurrentElfTotal(line)
-            }
-
-        private fun addCaloriesToCurrentElfTotal(calories: Int) {
-            require(calories >= 0)
-            runningTotalCaloriesForCurrentElf += calories
-        }
-
-        private fun addCaloriesToCurrentElfTotal(calories: String) {
-            addCaloriesToCurrentElfTotal(calories.toInt())
-        }
-
-        private fun stopTrackingCurrentElf() {
-            topNMaxCalories = topNMaxCalories.plus(runningTotalCaloriesForCurrentElf).sortedDescending().take(n)
-            runningTotalCaloriesForCurrentElf = 0
-        }
+    init {
+        require(n >= 1)
     }
 
+    fun sumTopNMaxCalories(input: List<String>) =
+        input.forEach(::processLine).run { topNMaxCalories.sum() }
+
+    private fun processLine(line: String) =
+        if (line.isBlank()) {
+            stopTrackingCurrentElf()
+        } else {
+            addCaloriesToCurrentElfTotal(line)
+        }
+
+    private fun addCaloriesToCurrentElfTotal(calories: Int) {
+        require(calories >= 0)
+        runningTotalCaloriesForCurrentElf += calories
+    }
+
+    private fun addCaloriesToCurrentElfTotal(calories: String) {
+        addCaloriesToCurrentElfTotal(calories.toInt())
+    }
+
+    private fun stopTrackingCurrentElf() {
+        topNMaxCalories = topNMaxCalories.plus(runningTotalCaloriesForCurrentElf).sortedDescending().take(n)
+        runningTotalCaloriesForCurrentElf = 0
+    }
+}
+
+fun main() {
     fun part1(input: List<String>) = CalorieTracker(1).sumTopNMaxCalories(input)
 
     fun part2(input: List<String>) = CalorieTracker(3).sumTopNMaxCalories(input)
