@@ -3,21 +3,22 @@ fun main() {
         private var topNMaxCalories = List(n) { 0 }
         private var runningTotalCaloriesForCurrentElf = 0
 
-        fun tally(input: List<String>): CalorieTracker {
-            input.forEach {
-                if (it.isBlank()) {
-                    stopTrackingCurrentElf()
-                } else {
-                    addCaloriesToCurrentElfTotal(it)
-                }
-            }
-            return this
+        init {
+            require(n >= 1)
         }
 
-        fun sumTopNMaxCalories() = topNMaxCalories.sum()
+        fun sumTopNMaxCalories(input: List<String>) =
+            input.forEach(::processLine).run { topNMaxCalories.sum() }
+
+        private fun processLine(line: String) =
+            if (line.isBlank()) {
+                stopTrackingCurrentElf()
+            } else {
+                addCaloriesToCurrentElfTotal(line)
+            }
 
         private fun addCaloriesToCurrentElfTotal(calories: Int) {
-            check(calories >= 0) { "calories must be greater than or equal to 0" }
+            require(calories >= 0)
             runningTotalCaloriesForCurrentElf += calories
         }
 
@@ -31,9 +32,9 @@ fun main() {
         }
     }
 
-    fun part1(input: List<String>) = CalorieTracker(1).tally(input).sumTopNMaxCalories()
+    fun part1(input: List<String>) = CalorieTracker(1).sumTopNMaxCalories(input)
 
-    fun part2(input: List<String>) = CalorieTracker(3).tally(input).sumTopNMaxCalories()
+    fun part2(input: List<String>) = CalorieTracker(3).sumTopNMaxCalories(input)
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day01_test")
