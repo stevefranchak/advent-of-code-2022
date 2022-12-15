@@ -78,12 +78,9 @@ fun main() {
             // Also skip the "crate index" line - it's not needed with this approach
             .filter { it.isNotBlank() && !it.startsWith(" 1") }
             .forEach { inputLine ->
-                val moveInstruction = MoveInstruction.extractMoveInstruction(inputLine)
-                if (moveInstruction != null) {
-                    executeMoveInstruction(craneSimulator, moveInstruction)
-                } else {
-                    addToStartingStacks(inputLine)
-                }
+                MoveInstruction.extractMoveInstruction(inputLine)?.let {
+                    executeMoveInstruction(craneSimulator, it)
+                } ?: addToStartingStacks(inputLine)
             }
     }.getMessage()
 
