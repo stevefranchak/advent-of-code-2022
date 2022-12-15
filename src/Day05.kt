@@ -7,9 +7,7 @@ class CrateStacks {
 
     fun addToStartingStacks(inputLine: String) {
         inputLine.chunked(4).asSequence()
-            .map { crate ->
-                EXTRACT_CRATE_ID_REGEX.find(crate)?.value?.get(0)
-            }
+            .map { crate -> EXTRACT_CRATE_ID_REGEX.find(crate)?.value?.get(0) }
             .forEachIndexed { index, crateId ->
                 // Do this instead of filterNotNull'ing the sequence to retain the index
                 if (crateId == null) return@forEachIndexed
