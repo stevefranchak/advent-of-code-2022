@@ -42,33 +42,24 @@ class MoveInstruction(val numCratesToMove: Int, val fromStackIndex: Int, val toS
 
 interface CraneSimulator {
     fun moveCrates(numCratesToMove: Int, fromStack: ArrayDeque<Char>, toStack: ArrayDeque<Char>)
+
+    /**
+     * A mutable `take`.
+     */
+    fun <E> ArrayDeque<E>.steal(n: Int) = require(n >= 1) { "n must be greater than or equal to 1" }.run {
+        (1..n).map { removeFirst() }.toList()
+    }
 }
 
 class CrateMover9000Simulator : CraneSimulator {
     override fun moveCrates(numCratesToMove: Int, fromStack: ArrayDeque<Char>, toStack: ArrayDeque<Char>) {
-        (1..numCratesToMove).forEach { _ ->
-            toStack.addFirst(fromStack.removeFirst())
-        }
+        fromStack.steal(numCratesToMove).forEach { toStack.addFirst(it) }
     }
 }
 
 class CrateMover9001Simulator : CraneSimulator {
     override fun moveCrates(numCratesToMove: Int, fromStack: ArrayDeque<Char>, toStack: ArrayDeque<Char>) {
-        fromStack.steal(numCratesToMove)
-            .reversed()
-            .forEach {
-                toStack.addFirst(it)
-            }
-    }
-
-    /**
-     * A mutable `take`.
-     */
-    private fun <E> ArrayDeque<E>.steal(n: Int): List<E> {
-        require(n >= 1) { "n must be greater than or equal to 1" }
-        return (1..n).map {
-            removeFirst()
-        }.toList()
+        fromStack.steal(numCratesToMove).reversed().forEach { toStack.addFirst(it) }
     }
 }
 
